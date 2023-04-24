@@ -1,9 +1,9 @@
-const UserModel = require('../model/users');
+const UserModel = require('../model/userModel');
+const md5 = require('md5');
 
 class UserService {
-
-  async findUser(nameUser, emailUser) {
-    const find = await UserModel.findOne({ nameUser, emailUser });
+  async findUser(emailUser) {
+    const find = await UserModel.findOne({ emailUser });
     if (!find) return false;
     const { _id, name, email, dateOfBirth } = find;
     return { _id, name, email, dateOfBirth };
@@ -35,7 +35,7 @@ class UserService {
 
   async create(user) {
     const { name, email, password, dateOfBirth } = user;
-    const find = await UserModel.findOne({ name });
+    const find = await UserModel.findOne({ email });
 
     if (find) {        
       const { _id, name, email, dateOfBirth } = find;
@@ -45,14 +45,14 @@ class UserService {
       }
     }
 
-    const create = await UserModel.create({ name, email, password, dateOfBirth });
+    const create = await UserModel.create({ name, email, password: md5(password), dateOfBirth });
     return {
       message: "Novo Usuário Cadastrado com sucesso",
       user: {
         id: create._id,
         name: create.name,
         email: create.email,
-        dateOfBirth: create. dateOfBirth,
+        dateOfBirth: create.dateOfBirth,
       },
     }
   };

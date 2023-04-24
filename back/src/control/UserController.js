@@ -1,13 +1,12 @@
 const UserService = require('../service/UserService');
 
 class UserController {
-
   async findUser(req, res) {
     const { name: nameUser, email: emailUser } = req.body;
 
-    const find = await UserService.findUser(nameUser, emailUser);
+    const find = await UserService.findUser(emailUser);
 
-    if (find) return res.status(200).json({ message: "Usuário não encontrado" });
+    if (!find) return res.status(200).json({ message: "Usuário não encontrado" });
     
     const { _id, name, email, dateOfBirth } = find;
 
@@ -29,7 +28,7 @@ class UserController {
   async create(req, res) {
     const { name, email } = req.body;
     try {
-      const find = await UserService.findUser(name, email);
+      const find = await UserService.findUser(email);
       if (find) {
         return res.status(200).json(find);
       }
