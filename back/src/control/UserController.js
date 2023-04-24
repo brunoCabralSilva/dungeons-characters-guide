@@ -1,56 +1,80 @@
-const UserModel = require('../model/users');
+const UserService = require('../service/UserService');
 
 class UserController {
 
-  async findUser(name, email) {
-    const find = await UserModel.findOne({ name, email });
-    if (find) {
-      return false;
-    } return res.status(200).json({ find });
-  }
+  async findUser(req, res) {
+    const { name: nameUser, email: emailUser } = req.body;
+
+    const find = await UserService.findUser(nameUser, emailUser);
+
+    if (find) return res.status(200).json({ message: "Usuário não encontrado" });
+    
+    const { _id, name, email, dateOfBirth } = find;
+
+    return res.status(200).json({
+      message: "Usuário localizado com sucesso",
+      user: { _id, name, email, dateOfBirth },
+    });
+  };
 
   async read(req, res) {
-    const find = await UserModel.find();
-    return res.status(200).json({ find });
-  }
+    try {
+      const find = await UserService.read();
+      return res.status(200).json({ users: find });
+    } catch(error) {
+      return res.status(404).json({ message: error });
+    }
+  };
 
   async create(req, res) {
-    const { name, email, password, dateOfBirth } = req.body;
-    const find = await UserModel.findOne({ name });
-
-    if (find) return res.status(400).json({
-      message: "Já existe um usuário cadastrado com este nome",
-      user: find,
-    });
-
-    const create = await UserModel.create({ name, email, password, dateOfBirth })
-
-    return res.status(200).json({
-      message: "Novo Usuário Cadastrado com sucesso",
-      user: create});
-  }
+    const { name, email } = req.body;
+    try {
+      const find = await UserService.findUser(name, email);
+      if (find) {
+        return res.status(200).json(find);
+      }
+      const create = await UserService.create(req.body);
+      return res.status(200).json(create);
+    }
+    catch(error) {
+      return res.status(404).json({ message: error });
+    }
+  };
 
   async update(req, res) {
-    const { id, name, email, password, dateOfBirth } = req.body;
-    
-    await UserModel.updateOne(
-      { _id: id },
-      { $set: { name, email, password, dateOfBirth } }
-    );
+    const { id } = req.body;
+    try {
+      await UserService.update(req.body);
+      const find = await UserService.findById(id);
 
-    const find = await UserModel.findOne({ _id: id });
-
-    return res.status(200).json({
-      message: "Usuário alterado com sucesso",
-      user: find,
-    });
-  }
+      return res.status(200).json({
+        message: "Dados do Usuário alterados com sucesso",
+        user: find,
+      });
+    }
+    catch(error) {
+      return res.status(404).json({ message: error });
+    }
+  };
 
   async remove(req, res) {
-    await UserModel.deleteOne({ _id: req.body.id });
-    return res.status(200).json({
-      message: "Usuário removido com sucesso!",
-    });
+    const { id } = req.body;
+    try {
+      const find = await UserService.findById(id);
+      if (find) {
+        await UserService.remove(id);
+        return res.status(200).json({
+          message: "Usuário removido com sucesso!",
+        });
+      } else {
+        return res.status(200).json({
+          message: "Usuário inexistente",
+        });
+      }
+    }
+    catch(error) {
+      return res.status(404).json({ message: error });
+    }
   }
 }
 
