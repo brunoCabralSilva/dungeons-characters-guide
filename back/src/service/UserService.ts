@@ -1,16 +1,17 @@
-const UserModel = require('../model/userModel');
-const md5 = require('md5');
+import UserModel from '../model/userModel';
+import md5 from 'md5';
+import { IUser, IReqUser, IUserCreate, IResponseCreateUser } from '../interfaces/user';
 
 class UserService {
-  async findUser(emailUser) {
-    const find = await UserModel.findOne({ emailUser });
+  async findUser(emailUser: string) {
+    const find: IUser = await UserModel.findOne({ emailUser });
     if (!find) return false;
     const { _id, name, email, dateOfBirth } = find;
     return { _id, name, email, dateOfBirth };
   };
 
-  async findById(id) {
-    const find = await UserModel.findOne({ _id: id });
+  async findById(id: string) {
+    const find: IUser = await UserModel.findOne({ _id: id });
     if (!find) return false;
     const { _id, name, email, dateOfBirth } = find;
     return { _id, name, email, dateOfBirth };
@@ -19,8 +20,8 @@ class UserService {
   async read() {
     const find = await UserModel.find();
     if (find.length > 0) {
-      const listOfUsers = find.map((user) => {
-        const { _id, name, email, dateOfBirth } = user;
+      const listOfUsers = find.map((user: string) => {
+        const { _id, name, email, dateOfBirth }: = user;
         return {
           _id,
           name,
@@ -33,7 +34,7 @@ class UserService {
     return [];
   };
 
-  async create(user) {
+  async create(user: string) {
     const { name, email, password, dateOfBirth } = user;
     const find = await UserModel.findOne({ email });
 
@@ -49,7 +50,7 @@ class UserService {
     return {
       message: "Novo Usuário Cadastrado com sucesso",
       user: {
-        id: create._id,
+        _id: create._id,
         name: create.name,
         email: create.email,
         dateOfBirth: create.dateOfBirth,
@@ -57,7 +58,7 @@ class UserService {
     }
   };
 
-  async update(user) {
+  async update(user: string) {
     const { id, name, email, password, dateOfBirth } = user;
     
     await UserModel.updateOne(
@@ -73,9 +74,9 @@ class UserService {
     };
   };
 
-  async remove(id) {
+  async remove(id: string) {
     await UserModel.deleteOne({ _id: id });
   }
 }
 
-module.exports = new UserService();
+export default UserService;
