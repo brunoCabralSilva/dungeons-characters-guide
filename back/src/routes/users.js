@@ -1,11 +1,14 @@
-const express = require('express');
-const UserController = require('../control/UserController');
-
-const router = express.Router();
-
-router.post('/create', UserController.create);
-router.get('/read', UserController.read);
-router.put('/update', UserController.update);
-router.delete('/delete', UserController.remove);
-
-module.exports = router;
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = __importDefault(require("express"));
+const UserController_1 = __importDefault(require("../control/UserController"));
+const router = express_1.default.Router();
+const userController = new UserController_1.default();
+router.post('/create', userController.create);
+router.get('/read', userController.read);
+router.put('/update', userController.update);
+router.delete('/delete', userController.remove);
+exports.default = router;

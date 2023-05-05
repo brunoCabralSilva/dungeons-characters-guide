@@ -1,18 +1,22 @@
 import UserService from '../service/UserService';
 import { Request, Response } from 'express';
-import { IUser, IReqUser, IUserCreate, IResponseCreateUser } from '../interfaces/user';
+import { IUser, IReqUser, IUserCreateRequest, IResponseCreateUser } from '../interfaces/user';
 
 export default class UserController {
-  userService: UserService = new UserService();
+  userService: UserService;
 
-  async findUser(req: Request, res: Response): Promise<Response> {
+  constructor() {
+    this.userService = new UserService();
+  }
+
+  findUser = async (req: Request, res: Response): Promise<Response> => {
     const { email: emailUser }: IUser = req.body;
 
     const find: IReqUser | false = await this.userService.findUser(emailUser);
 
     if (!find) return res.status(200).json({ message: "Usuário não encontrado" });
     
-    const { _id, name, email, dateOfBirth }: IReqUser = find;
+    const { _id, name, email, dateOfBirth } = find;
 
     return res.status(200).json({
       message: "Usuário localizado com sucesso",
@@ -20,17 +24,18 @@ export default class UserController {
     });
   };
 
-  async read(req: Request, res: Response): Promise<Response> {
+  read = async (req: Request, res: Response): Promise<Response> => {
     try {
-      const find: IReqUser = await this.userService.read();
+      const find = await this.userService.read();
       return res.status(200).json({ users: find });
-    } catch(error) {
+    } catch(error: any) {
+      console.log('error', error);
       return res.status(404).json({ message: error });
     }
   };
 
-  async create(req: Request, res: Response): Promise<Response> {
-    const { email }: IUserCreate = req.body;
+  create = async (req: Request, res: Response): Promise<Response> => {
+    const { email }: IUserCreateRequest = req.body;
     try {
       const find: IReqUser | false = await this.userService.findUser(email);
       if (find) {
@@ -44,11 +49,11 @@ export default class UserController {
     }
   };
 
-  async update(req: Request, res: Response): Promise<Response> {
-    const { id }: IUser = req.body;
+  update = async (req: Request, res: Response): Promise<Response> => {
+    const { _id }: IUser = req.body;
     try {
       await this.userService.update(req.body);
-      const find: IReqUser | false = await this.userService.findById(id);
+      const find: IReqUser | false = await this.userService.findById(_id);
 
       return res.status(200).json({
         message: "Dados do Usuário alterados com sucesso",
@@ -60,12 +65,12 @@ export default class UserController {
     }
   };
 
-  async remove(req: Request, res: Response): Promise<Response> {
-    const { id }: IUser = req.body;
+  remove = async (req: Request, res: Response): Promise<Response> => {
+    const { _id }: IUser = req.body;
     try {
-      const find: IReqUser | false = await this.userService.findById(id);
+      const find: IReqUser | false = await this.userService.findById(_id);
       if (find) {
-        await this.userService.remove(id);
+        await this.userService.remove(_id);
         return res.status(200).json({
           message: "Usuário removido com sucesso!",
         });

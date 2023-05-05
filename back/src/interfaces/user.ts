@@ -1,12 +1,24 @@
+import { Types } from 'mongoose';
+
 export interface IUser {
-  id: string;
+  _id: string;
   name: string;
   email: string;
   password: string;
   dateOfBirth: string;
+  __v?: number,
 }
 
-export interface IUserCreate {
+export interface IUserCreateResponse {
+  _id: Types.ObjectId;
+  name: string;
+  email: string;
+  password: string;
+  dateOfBirth: string;
+  __v?: number,
+}
+
+export interface IUserCreateRequest {
 	name: string;
 	email: string;
 	password: string;
@@ -14,7 +26,7 @@ export interface IUserCreate {
 }
 
 export interface IReqUser {
-  _id: string;
+  _id: string | Types.ObjectId;
   name: string;
   email: string;
   dateOfBirth: string;

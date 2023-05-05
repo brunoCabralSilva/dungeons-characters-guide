@@ -8,7 +8,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+Object.defineProperty(exports, "__esModule", { value: true });
 const mongoose = require('mongoose');
 const MONGO_DB_URL = 'mongodb://localhost:27017/dungeon-character';
 const connectToDatabase = () => __awaiter(void 0, void 0, void 0, function* () { return yield mongoose.connect(MONGO_DB_URL); });
-module.exports = connectToDatabase;
+exports.default = connectToDatabase;
