@@ -39,56 +39,54 @@ export default function Nav() {
         className="w-12 h-12 bg-red-600 rounded-full cursor-pointer"
         onClick={ () => setMenu(!menu) }
       />
-
-      { menu &&
-        <div className="z-40 fixed top-0 right-0 p-3 pb-20 bg-white border border-left h-screen w-full sm:w-56 flex flex-col justify-between">
-          <div className="flex flex-col justify-around items-center">
-            <div
-              className="w-12 h-12 bg-red-600 rounded-full cursor-pointer mb-3"
-              onClick={ () => setMenu(!menu) }
-            />
-            <p>Name</p>
-          </div>
-          <div className="flex flex-col items-center">
-            <Link
-              to="/home"
-              className="mb-5"
-              onClick={ () => setMenu(!menu) }
-            >
-              Início
-            </Link>
-            <Link
-              to="/make-character-sheet"
-              className="mb-5"
-              onClick={ () => setMenu(!menu) }
-            >
-              Criar Ficha
-            </Link>
-            <Link
-              to="/character-sheet"
-              className="mb-5"
-              onClick={ () => setMenu(!menu) }
-            >
-              Minhas Fichas
-            </Link>
-            <Link
-              to="/profile"
-              className="mb-5"
-              onClick={ () => setMenu(!menu) }
-            >
-              Perfil
-            </Link>
-          </div>
-          <div className="flex justify-center">
-            <Link
-              to="/login"
-              onClick={ () => localStorage.removeItem('D&D-Characters-guide') }
-            >
-              Sair
-            </Link>
-          </div>
+      <div className={`${menu ? 'menu' : 'menu-disable'} transition-all flex flex-col justify-between`}>
+        <div className="flex flex-col justify-around items-center">
+          <div
+            className="w-12 h-12 bg-red-600 rounded-full cursor-pointer mb-3"
+            onClick={ () => setMenu(!menu) }
+          />
+          <p>Name</p>
         </div>
-      }
+        <div className="flex flex-col items-center">
+          <Link
+            to="/home"
+            className="mb-5 hover:underline hover:decoration-red-600 hover:decoration-2 hover:underline-offset-2"
+            onClick={ () => setMenu(!menu) }
+          >
+            Início
+          </Link>
+          <Link
+            to="/make-character-sheet"
+            className="mb-5 hover:underline hover:decoration-red-600 hover:decoration-2 hover:underline-offset-2"
+            onClick={ () => setMenu(!menu) }
+          >
+            Criar Ficha
+          </Link>
+          <Link
+            to="/character-sheet"
+            className="mb-5 hover:underline hover:decoration-red-600 hover:decoration-2 hover:underline-offset-2"
+            onClick={ () => setMenu(!menu) }
+          >
+            Minhas Fichas
+          </Link>
+          <Link
+            to="/profile"
+            className="mb-5 hover:underline hover:decoration-red-600 hover:decoration-2 hover:underline-offset-2"
+            onClick={ () => setMenu(!menu) }
+          >
+            Perfil
+          </Link>
+        </div>
+        <div className="flex justify-center">
+          <Link
+            to="/login"
+            onClick={ () => localStorage.removeItem('D&D-Characters-guide') }
+            className="hover:font-bold hover:text-red-600"
+          >
+            Sair
+          </Link>
+        </div>
+      </div>
     </nav>
   );
 }

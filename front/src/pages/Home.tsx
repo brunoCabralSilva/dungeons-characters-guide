@@ -7,11 +7,11 @@ export default function Home() {
       <Nav />
       <img
         src={require('../images/wallpapers/fullScreen.jpeg')}
-        className="absolute w-full h-screen object-cover hidden sm:flex"
+        className="absolute w-full h-screen object-cover"
         alt="Emblema do Dungeons & Dragons"
       />
       <div className="bg-white/70 h-screen w-full absolute z-10" />
-      <div className="relative z-30">
+      <div className="relative z-20">
         Home
       </div>
     </div>
