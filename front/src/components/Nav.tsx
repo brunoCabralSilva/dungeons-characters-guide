@@ -29,13 +29,19 @@ export default function Nav() {
         className="w-12 cursor-pointer"
         onClick={ () => navigate('/home') }
       />
+      <img
+        src={ require('../images/title.png') }
+        alt="Dnd Extralife"
+        className="w-64 hidden sm2:flex sm:w-96"
+        onClick={ () => navigate('/home') }
+      />
       <div
         className="w-12 h-12 bg-red-600 rounded-full cursor-pointer"
         onClick={ () => setMenu(!menu) }
       />
 
       { menu &&
-        <div className="fixed top-0 right-0 p-3 pb-20 bg-white border border-left h-screen w-full sm:w-56 flex flex-col justify-between">
+        <div className="z-40 fixed top-0 right-0 p-3 pb-20 bg-white border border-left h-screen w-full sm:w-56 flex flex-col justify-between">
           <div className="flex flex-col justify-around items-center">
             <div
               className="w-12 h-12 bg-red-600 rounded-full cursor-pointer mb-3"

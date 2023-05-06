@@ -1,6 +1,6 @@
 import axios from 'axios';
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 export default function Register() {
   const [firstName, setFirstName] = useState('');
@@ -15,6 +15,7 @@ export default function Register() {
   const [erDate, setErDate] = useState('');
   const [erPassword, setErPassword] = useState('');
   const [erPassword2, setErPassword2] = useState('');
+  const navigate = useNavigate();
 
   const validateData = async () => {
     const logs = await axios.post(`http://localhost:3333/users/email`,
@@ -89,6 +90,8 @@ export default function Register() {
         console.log(reg);
         
         localStorage.setItem('D&D-Characters-guide', JSON.stringify(reg.data.user.token));
+
+        navigate('/home');
 
       } catch(error) {
         window.alert(error);
