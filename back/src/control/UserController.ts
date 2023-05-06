@@ -4,8 +4,8 @@ import { IUser, IEmail, IReqUser, IUserCreateRequest, IResponseCreateUser, ILogi
 import ValidationToken from '../ValidationToken';
 
 export default class UserController {
-  userService: UserService;
-  validationToken: ValidationToken;
+  private userService: UserService;
+  private validationToken: ValidationToken;
 
   constructor() {
     this.userService = new UserService();
@@ -34,6 +34,17 @@ export default class UserController {
     return res.status(200).json({
       exist: find,
     });
+  };
+
+  authentication = (req: Request, res: Response): Response => {
+    const { token }: { token: string } = req.body;
+
+    const verifyUser: boolean = this.validationToken.verify(token);
+    
+    return res.status(200).json({
+      auth: verifyUser,
+    });
+
   };
 
   login = async (req: Request, res: Response): Promise<Response> => {
@@ -122,5 +133,5 @@ export default class UserController {
     catch(error) {
       return res.status(404).json({ message: error });
     }
-  }
+  };
 }

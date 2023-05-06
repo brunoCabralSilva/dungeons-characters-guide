@@ -34,6 +34,13 @@ class UserController {
                 exist: find,
             });
         });
+        this.authentication = (req, res) => {
+            const { token } = req.body;
+            const verifyUser = this.validationToken.verify(token);
+            return res.status(200).json({
+                auth: verifyUser,
+            });
+        };
         this.login = (req, res) => __awaiter(this, void 0, void 0, function* () {
             const { email: emailUser, password } = req.body;
             const find = yield this.userService.login(emailUser, password);

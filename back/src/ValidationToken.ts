@@ -16,9 +16,9 @@ interface IPayload {
 }
 
 export default class ValidationToken {
-  payload: IPayload;
-  jwtSecret: string;
-  jwtConfig: IJwtConfig;
+  private payload: IPayload;
+  private jwtSecret: string;
+  private jwtConfig: IJwtConfig;
 
   constructor() {
 
