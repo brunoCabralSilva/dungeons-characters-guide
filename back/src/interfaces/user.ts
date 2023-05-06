@@ -1,8 +1,18 @@
 import { Types } from 'mongoose';
 
+export interface ILogin {
+  email: string;
+  password: string;
+}
+
+export interface IEmail {
+  email: string;
+}
+
 export interface IUser {
   _id: string;
-  name: string;
+  firstName: string;
+	lastName: string;
   email: string;
   password: string;
   dateOfBirth: string;
@@ -11,7 +21,8 @@ export interface IUser {
 
 export interface IUserCreateResponse {
   _id: Types.ObjectId;
-  name: string;
+  firstName: string;
+	lastName: string;
   email: string;
   password: string;
   dateOfBirth: string;
@@ -19,7 +30,8 @@ export interface IUserCreateResponse {
 }
 
 export interface IUserCreateRequest {
-	name: string;
+  firstName: string;
+	lastName: string;
 	email: string;
 	password: string;
 	dateOfBirth: string;
@@ -27,7 +39,8 @@ export interface IUserCreateRequest {
 
 export interface IReqUser {
   _id: string | Types.ObjectId;
-  name: string;
+  firstName: string;
+	lastName: string;
   email: string;
   dateOfBirth: string;
 }

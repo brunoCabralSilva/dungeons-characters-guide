@@ -1,8 +1,10 @@
 import express from 'express';
 import users from './routes/users';
 import connection from './connection/connection';
+import cors from 'cors';
 
-const app = express();
+const app = express(); 
+app.use(cors());
 
 connection();
 

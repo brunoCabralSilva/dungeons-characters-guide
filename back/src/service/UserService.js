@@ -20,8 +20,27 @@ class UserService {
             const find = yield userModel_1.default.findOne({ emailUser });
             if (!find)
                 return false;
-            const { _id, name, email, dateOfBirth } = find;
-            return { _id, name, email, dateOfBirth };
+            const { _id, firstName, lastName, email, dateOfBirth } = find;
+            return { _id, firstName, lastName, email, dateOfBirth };
+        });
+    }
+    ;
+    login(emailUser, passwordUser) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const find = yield userModel_1.default.findOne({ email: emailUser, password: (0, md5_1.default)(passwordUser) });
+            if (!find)
+                return false;
+            const { _id, firstName, lastName, email, dateOfBirth } = find;
+            return { _id, firstName, lastName, email, dateOfBirth };
+        });
+    }
+    ;
+    findByEmail(email) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const find = yield userModel_1.default.findOne({ email: email });
+            if (!find)
+                return false;
+            return true;
         });
     }
     ;
@@ -30,8 +49,8 @@ class UserService {
             const find = yield userModel_1.default.findOne({ _id: idUser });
             if (!find)
                 return false;
-            const { _id, name, email, dateOfBirth } = find;
-            return { _id, name, email, dateOfBirth };
+            const { _id, firstName, lastName, email, dateOfBirth } = find;
+            return { _id, firstName, lastName, email, dateOfBirth };
         });
     }
     ;
@@ -40,10 +59,11 @@ class UserService {
             const find = yield userModel_1.default.find();
             if (find.length > 0) {
                 const listOfUsers = find.map((user) => {
-                    const { _id, name, email, dateOfBirth } = user;
+                    const { _id, firstName, lastName, email, dateOfBirth } = user;
                     return {
                         _id,
-                        name,
+                        firstName,
+                        lastName,
                         email,
                         dateOfBirth,
                     };
@@ -56,21 +76,22 @@ class UserService {
     ;
     create(user) {
         return __awaiter(this, void 0, void 0, function* () {
-            const { name, email, password, dateOfBirth } = user;
+            const { firstName, lastName, email, password, dateOfBirth } = user;
             const find = yield userModel_1.default.findOne({ email });
             if (find) {
-                const { _id, name, email, dateOfBirth } = find;
+                const { _id, firstName, lastName, email, dateOfBirth } = find;
                 return {
                     message: "Já existe um usuário cadastrado com este nome",
-                    user: { _id, name, email, dateOfBirth },
+                    user: { _id, firstName, lastName, email, dateOfBirth },
                 };
             }
-            const create = yield userModel_1.default.create({ name, email, password: (0, md5_1.default)(password), dateOfBirth });
+            const create = yield userModel_1.default.create({ firstName, lastName, email, password: (0, md5_1.default)(password), dateOfBirth });
             return {
                 message: "Novo Usuário Cadastrado com sucesso",
                 user: {
                     _id: create._id,
-                    name: create.name,
+                    firstName: create.firstName,
+                    lastName: create.lastName,
                     email: create.email,
                     dateOfBirth: create.dateOfBirth,
                 },
@@ -80,8 +101,8 @@ class UserService {
     ;
     update(user) {
         return __awaiter(this, void 0, void 0, function* () {
-            const { _id: idUser, name, email, password, dateOfBirth } = user;
-            yield userModel_1.default.updateOne({ _id: idUser }, { $set: { name, email, password, dateOfBirth } });
+            const { _id: idUser, firstName, lastName, email, password, dateOfBirth } = user;
+            yield userModel_1.default.updateOne({ _id: idUser }, { $set: { firstName, lastName, email, password, dateOfBirth } });
             const find = yield userModel_1.default.findOne({ _id: idUser });
             return {
                 message: "Usuário alterado com sucesso",

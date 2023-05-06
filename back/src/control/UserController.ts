@@ -1,12 +1,15 @@
 import UserService from '../service/UserService';
 import { Request, Response } from 'express';
-import { IUser, IReqUser, IUserCreateRequest, IResponseCreateUser } from '../interfaces/user';
+import { IUser, IEmail, IReqUser, IUserCreateRequest, IResponseCreateUser, ILogin } from '../interfaces/user';
+import ValidationToken from '../ValidationToken';
 
 export default class UserController {
   userService: UserService;
+  validationToken: ValidationToken;
 
   constructor() {
     this.userService = new UserService();
+    this.validationToken = new ValidationToken();
   }
 
   findUser = async (req: Request, res: Response): Promise<Response> => {
@@ -16,11 +19,37 @@ export default class UserController {
 
     if (!find) return res.status(200).json({ message: "Usuário não encontrado" });
     
-    const { _id, name, email, dateOfBirth } = find;
+    const { _id, firstName, lastName, email, dateOfBirth } = find;
 
     return res.status(200).json({
       message: "Usuário localizado com sucesso",
-      user: { _id, name, email, dateOfBirth },
+      user: { _id, firstName, lastName, email, dateOfBirth },
+    });
+  };
+
+  findByEmail = async (req: Request, res: Response): Promise<Response> => {
+    const { email }: IEmail = req.body;
+    const find: boolean = await this.userService.findByEmail(email);
+    
+    return res.status(200).json({
+      exist: find,
+    });
+  };
+
+  login = async (req: Request, res: Response): Promise<Response> => {
+    const { email: emailUser, password }: ILogin = req.body;
+    
+    const find: IReqUser | false = await this.userService.login(emailUser, password);
+
+    if (!find) return res.status(400).json({ message: "Usuário não encontrado" });
+    
+    const { _id, firstName, lastName, email, dateOfBirth } = find;
+
+    const token: string = this.validationToken.generateToken(email, firstName, lastName, dateOfBirth);
+
+    return res.status(200).json({
+      message: "Usuário localizado com sucesso",
+      user: { _id, firstName, lastName, email, dateOfBirth, token },
     });
   };
 
@@ -41,8 +70,18 @@ export default class UserController {
       if (find) {
         return res.status(200).json(find);
       }
+
       const create: IResponseCreateUser = await this.userService.create(req.body);
-      return res.status(200).json(create);
+
+      const token: string = this.validationToken.generateToken(email, create.user.firstName, create.user.lastName, create.user.dateOfBirth);
+
+      return res.status(200).json({
+        message: create.message,
+        user: {
+          ...create.user,
+          token,
+        }
+      });
     }
     catch(error) {
       return res.status(404).json({ message: error });

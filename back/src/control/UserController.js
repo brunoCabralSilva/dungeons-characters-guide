@@ -13,6 +13,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const UserService_1 = __importDefault(require("../service/UserService"));
+const ValidationToken_1 = __importDefault(require("../ValidationToken"));
 class UserController {
     constructor() {
         this.findUser = (req, res) => __awaiter(this, void 0, void 0, function* () {
@@ -20,10 +21,29 @@ class UserController {
             const find = yield this.userService.findUser(emailUser);
             if (!find)
                 return res.status(200).json({ message: "Usuário não encontrado" });
-            const { _id, name, email, dateOfBirth } = find;
+            const { _id, firstName, lastName, email, dateOfBirth } = find;
             return res.status(200).json({
                 message: "Usuário localizado com sucesso",
-                user: { _id, name, email, dateOfBirth },
+                user: { _id, firstName, lastName, email, dateOfBirth },
+            });
+        });
+        this.findByEmail = (req, res) => __awaiter(this, void 0, void 0, function* () {
+            const { email } = req.body;
+            const find = yield this.userService.findByEmail(email);
+            return res.status(200).json({
+                exist: find,
+            });
+        });
+        this.login = (req, res) => __awaiter(this, void 0, void 0, function* () {
+            const { email: emailUser, password } = req.body;
+            const find = yield this.userService.login(emailUser, password);
+            if (!find)
+                return res.status(400).json({ message: "Usuário não encontrado" });
+            const { _id, firstName, lastName, email, dateOfBirth } = find;
+            const token = this.validationToken.generateToken(email, firstName, lastName, dateOfBirth);
+            return res.status(200).json({
+                message: "Usuário localizado com sucesso",
+                user: { _id, firstName, lastName, email, dateOfBirth, token },
             });
         });
         this.read = (req, res) => __awaiter(this, void 0, void 0, function* () {
@@ -44,7 +64,11 @@ class UserController {
                     return res.status(200).json(find);
                 }
                 const create = yield this.userService.create(req.body);
-                return res.status(200).json(create);
+                const token = this.validationToken.generateToken(email, create.user.firstName, create.user.lastName, create.user.dateOfBirth);
+                return res.status(200).json({
+                    message: create.message,
+                    user: Object.assign(Object.assign({}, create.user), { token })
+                });
             }
             catch (error) {
                 return res.status(404).json({ message: error });
@@ -85,6 +109,7 @@ class UserController {
             }
         });
         this.userService = new UserService_1.default();
+        this.validationToken = new ValidationToken_1.default();
     }
 }
 exports.default = UserController;

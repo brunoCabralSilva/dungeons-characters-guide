@@ -1,27 +1,7 @@
-import axios from 'axios';
-import React, { useState } from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
 
-export default function Login() {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-
-  const login = async (): Promise<void> => {
-    try {
-      const resp = await axios.post(`http://localhost:3333/users/login`,
-        {
-          email,
-          password,
-        },
-      );
-      
-      localStorage.setItem('D&D-Characters-guide', JSON.stringify(resp.data.user.token));
-
-    } catch(error) {
-      window.alert(error);
-    }
-  };
-
+export default function Forgot() {
   return(
     <div className="h-screen w-full flex bg-mobile sm:bg-gray-200 sm:bg-none bg-cover relative justify-center">
       <img
@@ -42,8 +22,6 @@ export default function Login() {
               <input
                 id="email"
                 type="email"
-                value={email}
-                onChange={ (e) => setEmail(e.target.value) }
                 placeholder="Email"
                 autoComplete="off"
                 className="shadow-md rounded-full px-2 py-2 text-center text-sm"
@@ -53,15 +31,12 @@ export default function Login() {
               <input
                 id="password"
                 type="password"
-                value={password}
-                onChange={ (e) => setPassword(e.target.value) }
                 placeholder="Password"
                 className="shadow-md rounded-full px-2 py-2 text-center text-sm"
               />
             </label>
             <button
               type="button"
-              onClick={ login }
               className="w-full hover:font-bold transition duration-500 rounded-full mt-3 bg-red-700 text-white shadow-md text-sm px-2 py-2 text-center"
             >
               Login

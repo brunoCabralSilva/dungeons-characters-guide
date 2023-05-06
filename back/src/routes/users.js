@@ -8,6 +8,8 @@ const UserController_1 = __importDefault(require("../control/UserController"));
 const router = express_1.default.Router();
 const userController = new UserController_1.default();
 router.post('/create', userController.create);
+router.post('/login', userController.login);
+router.post('/email', userController.findByEmail);
 router.get('/read', userController.read);
 router.put('/update', userController.update);
 router.delete('/delete', userController.remove);
