@@ -1,11 +1,11 @@
 import React from 'react';
 import Nav from '../components/Nav';
 
-export default function Home() {
+export default function ListOfSheets() {
   return(
     <div>
       <Nav />
-      Home
+      Lista de Fichas
     </div>
   );
 }

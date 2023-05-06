@@ -1,10 +1,27 @@
 import axios from 'axios';
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 
 export default function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const dataToken: string | null = localStorage.getItem('D&D-Characters-guide');
+
+    const validateToken = async () => {
+      if (dataToken) {
+        const token = await axios.post(`http://localhost:3333/users/authentication`, { token: JSON.parse(dataToken) },
+        );
+        if (token.data.auth) {
+          navigate('/home');
+        }
+      }
+    };
+    validateToken();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const login = async (): Promise<void> => {
     try {
@@ -16,6 +33,8 @@ export default function Login() {
       );
       
       localStorage.setItem('D&D-Characters-guide', JSON.stringify(resp.data.user.token));
+      
+      navigate('/home');
 
     } catch(error) {
       window.alert(error);
