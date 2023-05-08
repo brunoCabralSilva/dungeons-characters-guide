@@ -1,10 +1,13 @@
 import axios from 'axios';
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import ErrorMessage from '../components/ErrorMessage';
+import { validateEmail, validatePassword } from '../components/loginValidation';
 
 export default function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [erMessage, setErMessage] = useState('');
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -24,20 +27,30 @@ export default function Login() {
   }, []);
 
   const login = async (): Promise<void> => {
-    try {
-      const resp = await axios.post(`http://localhost:3333/users/login`,
-        {
-          email,
-          password,
-        },
-      );
-      
-      localStorage.setItem('D&D-Characters-guide', JSON.stringify(resp.data.user.token));
-      
-      navigate('/home');
 
-    } catch(error) {
-      window.alert(error);
+    const vEmail: boolean = validateEmail(email);
+    const vPassword: boolean = validatePassword(password);
+
+    if (!vEmail || !vPassword) {
+      setErMessage('Não foi possível realizar o Login. Por favor, verifique os dados informados.');
+      setTimeout(() => setErMessage(''), 3000);
+    } else {
+      try {
+        const resp = await axios.post(`http://localhost:3333/users/login`,
+          {
+            email,
+            password,
+          },
+        );
+        
+        localStorage.setItem('D&D-Characters-guide', JSON.stringify(resp.data.user.token));
+        
+        navigate('/home');
+  
+      } catch(error) {
+        setErMessage('Email e/ou senha Incorretos');
+        setTimeout(() => setErMessage(''), 3000);
+      }
     }
   };
 
@@ -86,12 +99,15 @@ export default function Login() {
               Login
             </button>
           </div>
-          <Link
-            to="/forgot"
-            className="w-full text-right hover:underline mb-10 pt-2 px-4 text-gray-800 text-sm"
-          >
-            Esqueceu a Senha?
-          </Link>
+          <div className="w-full flex justify-end">
+            <Link
+              to="/forgot"
+              className="text-right hover:underline mb-10 pt-2 px-4 text-gray-800 text-sm"
+            >
+              Esqueceu a Senha?
+            </Link>
+          </div>
+          <ErrorMessage message={ erMessage } />
           <Link
             to="/register"
             type="button"

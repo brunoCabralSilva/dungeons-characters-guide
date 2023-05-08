@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { Link, useNavigate } from 'react-router-dom';
+import ErrorMessage from '../components/ErrorMessage';
+import { validateEmail } from '../components/loginValidation';
 
 export default function Forgot() {
   const navigate = useNavigate();
@@ -8,8 +10,8 @@ export default function Forgot() {
   const [erEmail, setErEmail] = useState('');
 
   const forgotPassword = async () => {
-    const validateEmail = /\S+@\S+\.\S+/;
-    if (!email || !validateEmail.test(email) || email === '') {
+    const vEmail = validateEmail(email);
+    if (!vEmail) {
       setErEmail('Necessário preencher um E-mail Válido');
     } else {
       try {
@@ -24,12 +26,6 @@ export default function Forgot() {
         setErEmail(`Houve um erro: ${error}`);
       }
     }
-  };
-
-  const errorMessage = (message: string) => {
-    if (message !== '') {
-      return (<div className="w-full text-center font-bold my-3">{message}</div>);
-    } return <div className="height: 3vh;" />
   };
 
   return(
@@ -62,11 +58,11 @@ export default function Forgot() {
             <button
               type="button"
               onClick={ forgotPassword }
-              className="w-full hover:font-bold transition duration-500 rounded-full mt-3 bg-red-700 text-white shadow-md text-sm px-2 py-2 text-center"
+              className="w-full hover:font-bold transition duration-500 rounded-full mt-3 bg-red-700 text-white shadow-md text-sm px-2 py-2 text-center mb-5"
             >
               Resgatar Senha
             </button>
-            { errorMessage(erEmail) }
+            <ErrorMessage message={ erEmail } />
           </div>
           <Link
             to="/login"

@@ -9,6 +9,9 @@ module.exports = {
         'mobile': "url('images/wallpapers/mobile.jpg')",
         'fullscreen': "url('images/wallpapers/fullScreen.jpeg')",
       },
+      spacing: {
+        '3vh': '3vh',
+      }
     },
     screens: {
       'sm3': '300px',
@@ -18,7 +21,8 @@ module.exports = {
       'lg':	'1024px',
       'xl':	'1280px',
       '2xl': '1536px',
-      },
+    },
+
   },
   plugins: [],
 }
