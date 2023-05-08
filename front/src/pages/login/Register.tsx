@@ -1,8 +1,8 @@
 import axios from 'axios';
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import ErrorMessage from '../components/ErrorMessage';
-import { equalityPassword, validateEmail, validateName, validatePassword, validateDate } from '../components/loginValidation';
+import ErrorMessage from '../../components/ErrorMessage';
+import { equalityPassword, validateEmail, validateName, validatePassword, validateDate } from '../../components/loginValidation';
 
 export default function Register() {
   const [firstName, setFirstName] = useState('');
@@ -64,7 +64,7 @@ export default function Register() {
 
   const register = async (): Promise<void> => {
     const validation: boolean = await validateData();
-    console.log(validation);
+
     if (validation) {
       try {
         const reg = await axios.post(`http://localhost:3333/users/create`,
@@ -83,7 +83,7 @@ export default function Register() {
   return(
     <div className="min-h-screen w-full flex bg-mobile sm:bg-gray-200 sm:bg-none bg-cover relative justify-center">
       <img
-        src={require('../images/wallpapers/fullScreen.jpeg')}
+        src={require('../../images/wallpapers/fullScreen.jpeg')}
         className="absolute w-full min-h-screen object-cover hidden sm:flex"
         alt="Emblema do Dungeons & Dragons"
       />
@@ -91,7 +91,7 @@ export default function Register() {
       <section className="w-full sm3:w-11/12 sm2:w-9/12 sm:w-7/12 lg:w-5/12 p-4 flex items-center justify-center z-20">
         <div className="flex flex-col w-full md:w-4/5 items-center">
           <img
-            src={require('../images/dnd.png')}
+            src={require('../../images/dnd.png')}
             className="w-11/12"
             alt="Emblema do Dungeons & Dragons"
           />

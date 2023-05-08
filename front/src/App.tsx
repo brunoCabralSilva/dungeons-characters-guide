@@ -1,14 +1,14 @@
 import { Navigate, Route, Routes } from 'react-router-dom';
 import './App.css';
 import React from 'react';
-import Login from './pages/Login';
-import Register from './pages/Register';
-import Forgot from './pages/Forgot';
+import Login from './pages/login/Login';
+import Register from './pages/login/Register';
+import Forgot from './pages/login/Forgot';
 import Home from './pages/Home';
 import ListOfSheets from './pages/ListOfSheets';
 import NewSheet from './pages/NewSheet';
 import Profile from './pages/Profile';
-import Validation from './pages/Validation';
+import Validation from './pages/login/ResetPassword';
 
 export default function App() {
   return (

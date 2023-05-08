@@ -22,19 +22,14 @@ export const validateDate = (date: string): boolean => {
   const atualYear: number = new Date().getFullYear();
 
   if(year < atualYear - 120 || year > atualYear) {
-    console.log('1');
     return false;
   } else if (year > atualYear - 10) {
-    console.log('2');
     return false;
   } else if (month > 12 || month < 1) {
-    console.log('3');
     return false;
   } else if (day < 1 || day > 31) {
-    console.log('4');
     return false;
   } else {
-    console.log('5');
     return true;
   }
 };

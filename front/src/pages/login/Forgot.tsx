@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { Link, useNavigate } from 'react-router-dom';
-import ErrorMessage from '../components/ErrorMessage';
-import { validateEmail } from '../components/loginValidation';
+import ErrorMessage from '../../components/ErrorMessage';
+import { validateEmail } from '../../components/loginValidation';
 
 export default function Forgot() {
   const navigate = useNavigate();
@@ -31,7 +31,7 @@ export default function Forgot() {
   return(
     <div className="h-screen w-full flex bg-mobile sm:bg-gray-200 sm:bg-none bg-cover relative justify-center">
       <img
-        src={require('../images/wallpapers/fullScreen.jpeg')}
+        src={require('../../images/wallpapers/fullScreen.jpeg')}
         className="absolute w-full h-screen object-cover hidden sm:flex"
         alt="Emblema do Dungeons & Dragons"
       />
@@ -39,7 +39,7 @@ export default function Forgot() {
       <section className="w-full sm3:w-11/12 sm2:w-9/12 sm:w-7/12 lg:w-5/12 p-4 flex items-center justify-center z-20">
         <div className="flex flex-col w-full md:w-4/5 items-center">
           <img
-            src={require('../images/dnd.png')}
+            src={require('../../images/dnd.png')}
             className="w-11/12"
             alt="Emblema do Dungeons & Dragons"
           />
