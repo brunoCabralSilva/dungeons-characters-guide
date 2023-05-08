@@ -12,6 +12,15 @@ export default class UserController {
     this.validationToken = new ValidationToken();
   }
 
+  randomString = () => {
+    var stringAleatoria = '';
+    var caracteres = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    for (let i = 0; i < 6; i += 1) {
+      stringAleatoria += caracteres.charAt(Math.floor(Math.random() * caracteres.length));
+    }
+    return stringAleatoria;
+}
+
   findUser = async (req: Request, res: Response): Promise<Response> => {
     const { email: emailUser }: IUser = req.body;
 
@@ -35,6 +44,32 @@ export default class UserController {
       exist: find,
     });
   };
+
+  resetPassword = async (req: Request, res: Response): Promise<Response> => {
+    const { email }: IEmail = req.body;
+    try {
+    const find: boolean = await this.userService.findByEmail(email);
+      if (find) {
+        const generate = this.randomString().toUpperCase();
+        await this.userService.resetPassword(email, generate);
+      } return res.status(200).json({ });
+    } catch(error) {
+      return res.status(200).json({ });
+    }
+  };
+
+  changePassword = async (req: Request, res: Response): Promise<Response> => {
+    const { email, password }: { email: string, password: string } = req.body;
+    try {
+    const change = await this.userService.resetPassword(email, password);
+    if (change) {
+      return res.status(200).json({ message: "Senha alterada com sucesso, redirecionando..." });
+    } return res.status(200).json({ message: "Não foi possível alterar a senha do usuário" });
+    } catch(error) {
+      return res.status(200).json({ message: `Não foi possível alterar a senha do usuário (${error})` });
+    }
+
+  }
 
   authentication = (req: Request, res: Response): Response => {
     const { token }: { token: string } = req.body;

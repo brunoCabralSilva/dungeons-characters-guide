@@ -1,7 +1,37 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState } from 'react';
+import axios from 'axios';
+import { Link, useNavigate } from 'react-router-dom';
 
 export default function Forgot() {
+  const navigate = useNavigate();
+  const [email, setEmail] = useState('');
+  const [erEmail, setErEmail] = useState('');
+
+  const forgotPassword = async () => {
+    const validateEmail = /\S+@\S+\.\S+/;
+    if (!email || !validateEmail.test(email) || email === '') {
+      setErEmail('Necessário preencher um E-mail Válido');
+    } else {
+      try {
+        await axios.post(`http://localhost:3333/users/forgot`,
+        { email });
+
+        setErEmail('E-mail enviado com sucesso. Verifique a sua Caixa de Entrada ou o SPAM.');
+
+        setTimeout(() => navigate('/validation'), 3000);
+
+      } catch(error) {
+        setErEmail(`Houve um erro: ${error}`);
+      }
+    }
+  };
+
+  const errorMessage = (message: string) => {
+    if (message !== '') {
+      return (<div className="w-full text-center font-bold my-3">{message}</div>);
+    } return <div className="height: 3vh;" />
+  };
+
   return(
     <div className="h-screen w-full flex bg-mobile sm:bg-gray-200 sm:bg-none bg-cover relative justify-center">
       <img
@@ -22,38 +52,28 @@ export default function Forgot() {
               <input
                 id="email"
                 type="email"
+                value={ email }
+                onChange={ (e) => setEmail(e.target.value) }
                 placeholder="Email"
                 autoComplete="off"
                 className="shadow-md rounded-full px-2 py-2 text-center text-sm"
               />
             </label>
-            <label htmlFor="password" className="flex flex-col mt-3 w-full">
-              <input
-                id="password"
-                type="password"
-                placeholder="Password"
-                className="shadow-md rounded-full px-2 py-2 text-center text-sm"
-              />
-            </label>
             <button
               type="button"
+              onClick={ forgotPassword }
               className="w-full hover:font-bold transition duration-500 rounded-full mt-3 bg-red-700 text-white shadow-md text-sm px-2 py-2 text-center"
             >
-              Login
+              Resgatar Senha
             </button>
+            { errorMessage(erEmail) }
           </div>
           <Link
-            to="/forgot"
-            className="w-full text-right hover:underline mb-10 pt-2 px-4 text-gray-800 text-sm"
-          >
-            Esqueceu a Senha?
-          </Link>
-          <Link
-            to="/register"
+            to="/login"
             type="button"
             className="mt-10 px-2 py-2 text-center mb-5 hover:underline w-11/12 transition duration-500 text-gray-800 text-sm"
           >
-            Ainda não possui cadastro?
+            Voltar para tela de Login
           </Link>
         </div>
       </section>

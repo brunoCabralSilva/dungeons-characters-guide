@@ -49,3 +49,12 @@ export interface IResponseCreateUser {
   message: string;
   user: IReqUser;
 }
+
+export interface IUserUpdate {
+  acknowledged: boolean,
+  modifiedCount: number,
+  upsertedId: Types.ObjectId | null,
+  upsertedCount: number,
+  matchedCount: number,
+  UpdateResult? : any
+}

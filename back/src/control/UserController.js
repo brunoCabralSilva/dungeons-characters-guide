@@ -16,6 +16,14 @@ const UserService_1 = __importDefault(require("../service/UserService"));
 const ValidationToken_1 = __importDefault(require("../ValidationToken"));
 class UserController {
     constructor() {
+        this.randomString = () => {
+            var stringAleatoria = '';
+            var caracteres = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+            for (let i = 0; i < 6; i += 1) {
+                stringAleatoria += caracteres.charAt(Math.floor(Math.random() * caracteres.length));
+            }
+            return stringAleatoria;
+        };
         this.findUser = (req, res) => __awaiter(this, void 0, void 0, function* () {
             const { email: emailUser } = req.body;
             const find = yield this.userService.findUser(emailUser);
@@ -33,6 +41,33 @@ class UserController {
             return res.status(200).json({
                 exist: find,
             });
+        });
+        this.resetPassword = (req, res) => __awaiter(this, void 0, void 0, function* () {
+            const { email } = req.body;
+            try {
+                const find = yield this.userService.findByEmail(email);
+                if (find) {
+                    const generate = this.randomString().toUpperCase();
+                    yield this.userService.resetPassword(email, generate);
+                }
+                return res.status(200).json({});
+            }
+            catch (error) {
+                return res.status(200).json({});
+            }
+        });
+        this.changePassword = (req, res) => __awaiter(this, void 0, void 0, function* () {
+            const { email, password } = req.body;
+            try {
+                const change = yield this.userService.resetPassword(email, password);
+                if (change) {
+                    return res.status(200).json({ message: "Senha alterada com sucesso, redirecionando..." });
+                }
+                return res.status(200).json({ message: "Não foi possível alterar a senha do usuário" });
+            }
+            catch (error) {
+                return res.status(200).json({ message: `Não foi possível alterar a senha do usuário (${error})` });
+            }
         });
         this.authentication = (req, res) => {
             const { token } = req.body;

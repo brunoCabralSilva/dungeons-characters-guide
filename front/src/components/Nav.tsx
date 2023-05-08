@@ -36,7 +36,7 @@ export default function Nav() {
         onClick={ () => navigate('/home') }
       />
       <div
-        className="w-12 h-12 bg-red-600 rounded-full cursor-pointer"
+        className={`w-12 h-12 ${menu ? 'bg-white' : 'bg-red-600'} rounded-full cursor-pointer`}
         onClick={ () => setMenu(!menu) }
       />
       <div className={`${menu ? 'menu' : 'menu-disable'} transition-all flex flex-col justify-between`}>

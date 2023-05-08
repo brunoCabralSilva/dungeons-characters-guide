@@ -8,6 +8,7 @@ import Home from './pages/Home';
 import ListOfSheets from './pages/ListOfSheets';
 import NewSheet from './pages/NewSheet';
 import Profile from './pages/Profile';
+import Validation from './pages/Validation';
 
 export default function App() {
   return (
@@ -16,6 +17,7 @@ export default function App() {
       <Route path="/login" element={<Login />} />
       <Route path="/register" element={<Register />} />
       <Route path="/forgot" element={<Forgot />} />
+      <Route path="/validation" element={<Validation />} />
       <Route path="/home" element={<Home />} />
       <Route path="/character-sheet" element={<ListOfSheets />} />
       <Route path="/make-character-sheet" element={<NewSheet />} />

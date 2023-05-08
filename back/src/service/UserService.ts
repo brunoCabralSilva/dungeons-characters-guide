@@ -1,6 +1,14 @@
 import UserModel from '../model/userModel';
+import nodemailer from 'nodemailer';
 import md5 from 'md5';
-import { IUser, IReqUser, IUserCreateResponse, IResponseCreateUser } from '../interfaces/user';
+import { IUser, IReqUser, IUserCreateResponse, IResponseCreateUser, IUserUpdate } from '../interfaces/user';
+import * as dotenv from 'dotenv';
+
+dotenv.config();
+
+interface MailtrapTransporter {
+  host: string;
+}
 
 export default class UserService {
 
@@ -10,6 +18,38 @@ export default class UserService {
     const { _id, firstName, lastName, email, dateOfBirth } = find;
     return { _id, firstName, lastName, email, dateOfBirth };
   };
+
+  async sendEmail(email:string, tokenReset: string): Promise<void> {
+    const connection = nodemailer.createTransport({
+      host: process.env.SMTP,
+      port: process.env.PORT,
+      secure: true,
+      auth: {
+        user: process.env.EMAIL,
+        pass: process.env.PASSWORD,
+      },
+    } as MailtrapTransporter);
+
+    await connection.sendMail({
+      from: process.env.EMAIL,
+      to: email,
+      subject: "Alteração de senha do D&D Character Guide",
+      text: `a solicitação para alterar a sua senha. Utilize o código ${tokenReset} `
+    });
+  };
+
+  async resetPassword(email:string, tokenReset: string): Promise<Boolean> {
+    try {
+      const updatePassword = await UserModel.updateOne(
+        { email: email },
+        { $set: { "password": md5(tokenReset) } }
+      );
+      this.sendEmail(email, tokenReset);
+      return updatePassword.modifiedCount === 1;
+    } catch (error) {
+      return false;
+    }
+  }
 
   async login(emailUser: string, passwordUser: string): Promise<IReqUser | false> {
     const find: IUser | null = await UserModel.findOne({ email: emailUser, password: md5(passwordUser) });
