@@ -87,7 +87,9 @@ export default class UserController {
     
     const find: IReqUser | false = await this.userService.login(emailUser, password);
 
-    if (!find) return res.status(400).json({ message: "Usuário não encontrado" });
+    console.log(find)
+
+    if (!find) return res.status(200).json({ message: "Usuário não encontrado" });
     
     const { _id, firstName, lastName, email, dateOfBirth } = find;
 

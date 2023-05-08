@@ -79,8 +79,9 @@ class UserController {
         this.login = (req, res) => __awaiter(this, void 0, void 0, function* () {
             const { email: emailUser, password } = req.body;
             const find = yield this.userService.login(emailUser, password);
+            console.log(find);
             if (!find)
-                return res.status(400).json({ message: "Usuário não encontrado" });
+                return res.status(200).json({ message: "Usuário não encontrado" });
             const { _id, firstName, lastName, email, dateOfBirth } = find;
             const token = this.validationToken.generateToken(email, firstName, lastName, dateOfBirth);
             return res.status(200).json({
