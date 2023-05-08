@@ -58,3 +58,10 @@ export interface IUserUpdate {
   matchedCount: number,
   UpdateResult? : any
 }
+
+export interface IDecode {
+  email: string,
+  firstName: string,
+  lastName: string,
+  dateOfBirth: string,
+}

@@ -1,6 +1,6 @@
 import UserService from '../service/UserService';
 import { Request, Response } from 'express';
-import { IUser, IEmail, IReqUser, IUserCreateRequest, IResponseCreateUser, ILogin } from '../interfaces/user';
+import { IUser, IEmail, IReqUser, IUserCreateRequest, IResponseCreateUser, ILogin, IDecode } from '../interfaces/user';
 import ValidationToken from '../ValidationToken';
 
 export default class UserController {
@@ -80,6 +80,19 @@ export default class UserController {
       auth: verifyUser,
     });
 
+  };
+
+  decode = async (req: Request, res: Response): Promise<Response> => {
+    const { token }: { token: string } = req.body;
+
+    const verifyUser: IDecode = await this.validationToken.decode(token);
+    
+    return res.status(200).json({
+      firstName: verifyUser.firstName,
+      lastName: verifyUser.lastName,
+      email: verifyUser.email,
+      dateOfBirth: verifyUser.dateOfBirth,
+    });
   };
 
   login = async (req: Request, res: Response): Promise<Response> => {

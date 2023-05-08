@@ -13,6 +13,7 @@ router.post('/forgot', userController.resetPassword);
 router.post('/change-password', userController.changePassword);
 router.post('/email', userController.findByEmail);
 router.post('/authentication', userController.authentication);
+router.post('/decode', userController.decode);
 router.get('/read', userController.read);
 router.put('/update', userController.update);
 router.delete('/delete', userController.remove);

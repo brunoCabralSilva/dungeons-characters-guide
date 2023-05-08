@@ -1,5 +1,7 @@
-import jwt from 'jsonwebtoken';
+import jwt, { JwtPayload } from 'jsonwebtoken';
 import * as dotenv from 'dotenv';
+import jwt_decode from "jwt-decode";
+import { IDecode } from './interfaces/user';
 
 dotenv.config();
 
@@ -51,5 +53,24 @@ export default class ValidationToken {
     } catch( error) {
       return false;
     }
-  }
+  };
+
+  decode = async (token: string) => {
+    try {
+    const ver: IDecode = jwt_decode(token);
+    return {
+      firstName: ver.firstName,
+      lastName: ver.lastName,
+      dateOfBirth: ver.dateOfBirth,
+      email: ver.email,
+    };
+    } catch( error) {
+      return {
+        firstName: '',
+        lastName: '',
+        dateOfBirth: '',
+        email: '',
+      };
+    }
+  };
 };

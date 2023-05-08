@@ -76,10 +76,19 @@ class UserController {
                 auth: verifyUser,
             });
         };
+        this.decode = (req, res) => __awaiter(this, void 0, void 0, function* () {
+            const { token } = req.body;
+            const verifyUser = yield this.validationToken.decode(token);
+            return res.status(200).json({
+                firstName: verifyUser.firstName,
+                lastName: verifyUser.lastName,
+                email: verifyUser.email,
+                dateOfBirth: verifyUser.dateOfBirth,
+            });
+        });
         this.login = (req, res) => __awaiter(this, void 0, void 0, function* () {
             const { email: emailUser, password } = req.body;
             const find = yield this.userService.login(emailUser, password);
-            console.log(find);
             if (!find)
                 return res.status(200).json({ message: "Usuário não encontrado" });
             const { _id, firstName, lastName, email, dateOfBirth } = find;
@@ -95,7 +104,6 @@ class UserController {
                 return res.status(200).json({ users: find });
             }
             catch (error) {
-                console.log('error', error);
                 return res.status(404).json({ message: error });
             }
         });
