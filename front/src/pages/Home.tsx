@@ -1,7 +1,27 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import Nav from '../components/Nav';
+import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 export default function Home() {
+  const navigate = useNavigate();
+  
+  useEffect(() => {
+    const dataToken: string | null = localStorage.getItem('D&D-Characters-guide');
+
+    const validateToken = async () => {
+      if (dataToken) {
+        const token = await axios.post(`http://localhost:3333/users/authentication`, { token: JSON.parse(dataToken) },
+        );
+        if (!token.data.auth) {
+          navigate('/login');
+        }
+      }
+    };
+    validateToken();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   return(
     <div className="relative">
       <Nav />
