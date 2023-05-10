@@ -3,8 +3,6 @@ import axios from 'axios';
 import { Link, useNavigate } from 'react-router-dom';
 
 export default function Nav() {
-  const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
   const [open, setOpen] = useState(false);
   const [menu, setMenu] = useState(false);
   const navigate = useNavigate();
@@ -17,11 +15,6 @@ export default function Nav() {
         );
         if (!token.data.auth) {
           navigate('/login');
-        } else {
-          const decode = await axios.post(`http://localhost:3333/users/decode`, { token: JSON.parse(dataToken) });
-          console.log(decode);
-          setName(`${decode.data.firstName} ${decode.data.lastName}`);
-          setEmail(decode.data.email);
         }
       } else navigate('/login');
     };

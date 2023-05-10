@@ -9,19 +9,22 @@ import ListOfSheets from './pages/ListOfSheets';
 import NewSheet from './pages/NewSheet';
 import Profile from './pages/Profile';
 import Validation from './pages/login/ResetPassword';
+import Prov from './context/Prov';
 
 export default function App() {
   return (
-    <Routes>
-      <Route path="/" element={<Navigate replace to ="/login" />} />
-      <Route path="/login" element={<Login />} />
-      <Route path="/register" element={<Register />} />
-      <Route path="/forgot" element={<Forgot />} />
-      <Route path="/validation" element={<Validation />} />
-      <Route path="/home" element={<Home />} />
-      <Route path="/character-sheet" element={<ListOfSheets />} />
-      <Route path="/make-character-sheet" element={<NewSheet />} />
-      <Route path="/profile" element={<Profile />} />
-    </Routes>
+    <Prov>
+      <Routes>
+        <Route path="/" element={<Navigate replace to ="/login" />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
+        <Route path="/forgot" element={<Forgot />} />
+        <Route path="/validation" element={<Validation />} />
+        <Route path="/home" element={<Home />} />
+        <Route path="/character-sheet" element={<ListOfSheets />} />
+        <Route path="/make-character-sheet" element={<NewSheet />} />
+        <Route path="/profile" element={<Profile />} />
+      </Routes>
+    </Prov>
   );
 }

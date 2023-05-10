@@ -1,5 +1,13 @@
 import { createContext } from 'react';
-import { IContext } from './interface';
+
+interface IContext {
+  firstName: String;
+  lastName: String;
+  email: String;
+  setFirstName: (newState: string) => void;
+  setLastName: (newState: string) => void;
+  setEmail: (newState: string) => void;
+}
 
 const initialValue: IContext = {
   firstName: '',
